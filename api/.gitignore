@@ -1,0 +1,25 @@
+# Node
+node_modules/
+
+# TypeScript build
+/dist/
+**/dist/
+
+# Environment files
+.env
+*.env
+
+# Local auth token cache (dev)
+.zoho-tokens.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
