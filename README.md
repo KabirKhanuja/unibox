@@ -8,6 +8,10 @@ Plug-and-play Node.js SDK for multi-provider email OAuth (Gmail, Zoho, Outlook),
 npm install @kabiraa/unibox
 ```
 
+Requirements:
+- Node.js >= 18
+- Express (this package declares `express` as a peer dependency)
+
 ## Usage (Express)
 
 ```ts
@@ -17,7 +21,7 @@ import { createUnibox } from "@kabiraa/unibox";
 const app = express();
 
 const unibox = createUnibox({
- // where your frontend is served for oauth redirect
+  // where your frontend is served (used for OAuth redirect after success/error)
   webBaseUrl: "http://localhost:3000",
   providers: {
     gmail: {
@@ -41,17 +45,16 @@ const unibox = createUnibox({
     // generic llm config is recommended cause it supports other providers as well depending on your use
     // and pricing needs
     llm: {
-      provider: "groq", // or openai"or gemini
+      provider: "groq", // or "openai" or "gemini"
       apiKey: process.env.GROQ_API_KEY!,
-    //model: ,
+      // model: "...", // optional
     },
     //summarizer: async (subject, text) => ({ summary: "...", importanceScore: 5 }),
     //or can bring your own summarizer logic
   },
 });
 
-// this creates /auth/gmail, /auth/gmail/callback, /auth/gmail/unread etc routes for all providers based on 
-// your config
+// Creates /auth/gmail, /auth/gmail/callback, /auth/gmail/unread, etc for configured providers
 app.use("/auth", unibox.router());
 
 app.listen(4000);
@@ -77,11 +80,123 @@ When mounted at `/auth`:
 
 By default, Unibox uses an in-memory token store (good for local dev). For production, pass your own `tokenStore` implementing the exported `TokenStore` interface.
 
+### TokenStore example 
+
+```ts
+import type { TokenStore } from "@kabiraa/unibox";
+
+export function createSimpleTokenStore(): TokenStore {
+  const map = new Map<string, any>();
+  const key = (provider: string, email: string) => `${provider}:${email.trim().toLowerCase()}`;
+
+  return {
+    async get(provider, email) {
+      return map.get(key(provider, email));
+    },
+    async set(provider, email, tokens) {
+      map.set(key(provider, email), tokens);
+    },
+    async delete(provider, email) {
+      map.delete(key(provider, email));
+    },
+  };
+}
+```
+
+Then pass it:
+
+```ts
+const unibox = createUnibox({
+  providers: { /* ... */ },
+  tokenStore: createSimpleTokenStore(),
+});
+```
+
+For production you can use a shared store like redis so tokens persist across restarts and across multiple server instances
+
+## Fetching unread emails
+
+You can fetch unread emails in two ways:
+
+### A) Via the generated HTTP routes
+
+After connecting a mailbox ie oauth, call:
+
+```bash
+curl "http://localhost:4000/auth/gmail/unread?email=you@gmail.com"
+curl "http://localhost:4000/auth/zoho/unread?email=you@zoho.in"
+curl "http://localhost:4000/auth/outlook/unread?email=you@outlook.com"
+```
+
+### B) Programmatically (server-to-server)
+
+```ts
+const emails = await unibox.fetchUnread({ provider: "gmail", email: "you@gmail.com" });
+console.log(emails);
+```
+
+## Response shapes (types)
+
+When intelligence is disabled, you get `UnifiedEmail[]`.
+
+```ts
+type UnifiedEmail = {
+  id: string;
+  subject: string;
+  from: string;
+  date: string;
+  body?: string;
+  snippet?: string;
+  permalink?: string;
+  provider: "gmail" | "zoho" | "outlook";
+  mailboxEmail: string;
+};
+```
+
+When intelligence is enabled, you get `EnrichedEmail[]` ( it adds `summary` + `importanceScore`, and uses a normalized `text` field)
+
+```ts
+type EnrichedEmail = {
+  id: string;
+  subject: string;
+  from: string;
+  date: string;
+  permalink?: string;
+  provider: "gmail" | "zoho" | "outlook";
+  mailboxEmail: string;
+  text: string;
+  summary: string;
+  importanceScore: number; // 1..10
+};
+```
+
+## Provider setup notes
+
+You must create OAuth apps in each provider dashboard and set the redirect URIs to match your backend routes
+
+- Gmail:
+  - Redirect URI should point to your backend callback, like `https://api.example.com/auth/gmail/callback`
+  - Scope used includes Gmail read-only
+- Zoho:
+  - Redirect URI should point to `.../auth/zoho/callback`
+  - The route `GET /auth/zoho?email=...` auto picks the region from the email domain (eg `.in` for India)
+- Outlook:
+  - Redirect URI should point to `.../auth/outlook/callback`
+  - By default authority is the common tenant; you can override via `providers.outlook.authority`
+
+## Production gotchas
+
+- Don't use the default inmemory token store in production (tokens will be lost
+on server restart and won't be shared across multiple server instances)
+- OAuth redirects generally require HTTPS in production
+- Protect your `/auth/*` routes (rate limit, CSRF considerations wherever its relevant) and treat tokens as secrets
+- If you run multiple server instances then tokens must be stored in a shared store
+
 ## Intelligence (Groq / GPT / Gemini / custom)
 
 Unibox’s intelligence layer is **dynamic**:
 
-- Use `intelligence.llm` to pick a built-in provider (`groq`, `openai`, `gemini`)
+- Use `intelligence.llm` to pick a built in provider (`groq`, `openai`, `gemini`)
 - Or pass `intelligence.summarizer` to bring your own implementation
 
 Precedence: `summarizer` → `llm` → legacy `groq`.
@@ -118,7 +233,7 @@ createUnibox({
 });
 ```
 
-### Custom summarizer (example: OpenAI-compatible)
+### Custom summarizer
 
 ```ts
 import type { EmailSummarizer } from "@kabiraa/unibox";
