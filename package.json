@@ -1,7 +1,7 @@
 {
   "name": "@kabiraa/unibox",
   "version": "0.1.0",
-  "description": "Unibox: multi-provider email OAuth + unified inbox fetching + optional intelligence.",
+  "description": "Unibox: multi-provider email OAuth cum unified inbox fetching cum optional intelligence",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
