@@ -1,5 +1,5 @@
 {
-  "name": "@kabiraa/unibox",
+  "name": "unibox-sdk",
   "version": "0.1.0",
   "description": "Unibox: multi-provider email OAuth cum unified inbox fetching cum optional intelligence",
   "type": "module",
@@ -21,9 +21,6 @@
     "clean": "rm -rf dist",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prepublishOnly": "npm run clean && npm run build"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "peerDependencies": {
     "express": "^4.18.0 || ^5.0.0"

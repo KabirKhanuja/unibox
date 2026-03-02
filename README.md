@@ -1,11 +1,11 @@
-# @kabiraa/unibox
+# unibox-sdk
 
 Plug-and-play Node.js SDK for multi-provider email OAuth (Gmail, Zoho, Outlook), unified unread-email fetching, and optional AI-powered inbox intelligence.
 
 ## Install
 
 ```bash
-npm install @kabiraa/unibox
+npm install unibox-sdk
 ```
 
 Requirements:
@@ -16,7 +16,7 @@ Requirements:
 
 ```ts
 import express from "express";
-import { createUnibox } from "@kabiraa/unibox";
+import { createUnibox } from "unibox-sdk";
 
 const app = express();
 
@@ -83,7 +83,7 @@ By default, Unibox uses an in-memory token store (good for local dev). For produ
 ### TokenStore example 
 
 ```ts
-import type { TokenStore } from "@kabiraa/unibox";
+import type { TokenStore } from "unibox-sdk";
 
 export function createSimpleTokenStore(): TokenStore {
   const map = new Map<string, any>();
@@ -236,7 +236,7 @@ createUnibox({
 ### Custom summarizer
 
 ```ts
-import type { EmailSummarizer } from "@kabiraa/unibox";
+import type { EmailSummarizer } from "unibox-sdk";
 
 const summarizer: EmailSummarizer = async (subject, text) => {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -285,7 +285,7 @@ They don't contain the oauth logic by themselves
 ```tsx
 "use client";
 
-import type { Provider } from "@kabiraa/unibox";
+import type { Provider } from "unibox-sdk";
 
 type UniboxConnectButtonProps = {
   provider: Provider;
