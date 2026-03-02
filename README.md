@@ -128,7 +128,7 @@ curl "http://localhost:4000/auth/zoho/unread?email=you@zoho.in"
 curl "http://localhost:4000/auth/outlook/unread?email=you@outlook.com"
 ```
 
-### B) Programmatically (server-to-server)
+### B) Programmatically (server to server)
 
 ```ts
 const emails = await unibox.fetchUnread({ provider: "gmail", email: "you@gmail.com" });
@@ -271,13 +271,14 @@ createUnibox({
 });
 ```
 
-### Custom summarizer (example: Gemini)
+### Custom summarizer
 
-Same idea: call Gemini from inside `summarizer` and return `{ summary, importanceScore }`.
+Same idea: call Gemini from inside `summarizer` and return `{ summary, importanceScore }`
 
-## Next.js buttons (optional)
+## Next.js buttons 
 
-Your frontend buttons should only *start* OAuth by redirecting the browser to your backend routes (the ones created by `unibox.router()`). They do not contain OAuth logic.
+Your frontend buttons should only start OAuth by redirecting the browser to your backend routes (ie the ones created by `unibox.router()`). 
+They don't contain the oauth logic by themselves 
 
 ### Next.js App Router component
 
@@ -288,7 +289,9 @@ import type { Provider } from "@kabiraa/unibox";
 
 type UniboxConnectButtonProps = {
   provider: Provider;
-  /** where your backend mounted `unibox.router()`, e.g. "https://api.example.com/auth" or "/auth" */
+  // where your backend mounted `unibox.router()`
+  // eg : "https://api.example.com/auth" 
+  // eg : "/auth" 
   authBaseUrl?: string;
   children?: React.ReactNode;
 };
