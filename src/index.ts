@@ -1,5 +1,7 @@
 export { createUnibox } from "./createUnibox.js";
 
+export { connectUrl } from "./connectUrl.js";
+
 export { createInMemoryTokenStore } from "./token-store/inMemory.js";
 
 // public provider wrappers
@@ -19,6 +21,7 @@ export { processEmails } from "./intelligence/pipeline.js";
 
 // types are reexported from the main entry point for easier imports in user code
 export type {
+  ConnectUrlOptions,
   Provider,
   RawEmail,
   UnifiedEmail,

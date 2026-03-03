@@ -1,5 +1,12 @@
 export type Provider = "gmail" | "zoho" | "outlook";
 
+export type ConnectUrlOptions = {
+  provider: Provider;
+  authBaseUrl?: string;
+  email?: string;
+  zohoRegion?: "in" | "com";
+};
+
 export type RawEmail = {
   id: string;
   subject: string;
@@ -137,4 +144,5 @@ export type UniboxConfig = {
 export type UniboxInstance = {
   router(): import("express").Router;
   fetchUnread(params: { provider: Provider; email: string }): Promise<UnifiedEmail[] | EnrichedEmail[]>;
+  connectUrl(options: ConnectUrlOptions): string;
 };

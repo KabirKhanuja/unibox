@@ -267,12 +267,25 @@ createUnibox({
 
 Basically, your frontend just needs to redirect the browser to your backend auth routes
 
+Though zoho needs the mailbox email (`?email=...`) hence use `connectUrl()` to generate the right url
+
 ```tsx
 "use client";
 
+import { connectUrl } from "unibox-sdk";
+
 export function ConnectButton({ provider }: { provider: "gmail" | "zoho" | "outlook" }) {
   return (
-    <button type="button" onClick={() => (window.location.href = `/auth/${provider}`)}>
+    <button
+      type="button"
+      onClick={() =>
+        (window.location.href = connectUrl({
+          provider,
+          authBaseUrl: "/auth",
+          email: "you@zoho.in", // only required for zoho
+        }))
+      }
+    >
       Sign in with {provider}
     </button>
   );

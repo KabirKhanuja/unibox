@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { Router } from "express";
 import type {
+  ConnectUrlOptions,
   EmailSummarizer,
   EnrichedEmail,
   Provider,
@@ -9,6 +10,7 @@ import type {
   UniboxConfig,
   UniboxInstance,
 } from "./types.js";
+import { connectUrl as buildConnectUrl } from "./connectUrl.js";
 import { createInMemoryTokenStore } from "./token-store/inMemory.js";
 import {
   exchangeGmailCode,
@@ -403,8 +405,13 @@ export function createUnibox(config: UniboxConfig): UniboxInstance {
     return router;
   }
 
+  function connectUrl(options: ConnectUrlOptions): string {
+    return buildConnectUrl(options);
+  }
+
   return {
     router,
     fetchUnread,
+    connectUrl,
   };
 }
