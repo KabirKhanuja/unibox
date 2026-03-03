@@ -1,7 +1,7 @@
 {
   "name": "unibox-sdk",
   "version": "0.1.1",
-  "description": "Unibox: multi-provider email OAuth cum unified inbox fetching cum optional intelligence",
+  "description": "Unified email OAuth provider with inbox intelligence for modern applications.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
