@@ -20,7 +20,13 @@ Oauth 2.0 flow is handled when you hit the auth routes
 
 After signing in, you can fetch unread emails via HTTP or programmatically and with AI intelligence enabled, you'll get summaries and importance scores for each email
 
+version : with colors, dates, permalink
+
 ![alt text](assets/image-2.png)
+
+version : plane without colors, dates, or permalinks (good for testing)
+
+![alt text](assets/image-3.png)
 
 ## Installation
 
