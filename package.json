@@ -1,14 +1,16 @@
 {
   "name": "unibox-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unibox: multi-provider email OAuth cum unified inbox fetching cum optional intelligence",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -17,7 +19,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup",
     "clean": "rm -rf dist",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prepublishOnly": "npm run clean && npm run build"
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^20.0.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "engines": {
