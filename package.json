@@ -2,6 +2,10 @@
   "name": "unibox-sdk",
   "version": "0.1.5",
   "description": "Unified email OAuth provider with inbox intelligence for modern applications.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KabirKhanuja/unibox.git"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -43,10 +47,6 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "repository": {
-    "type": "git",
-    "url": ""
   },
   "license": "MIT",
   "keywords": [
