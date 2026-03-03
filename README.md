@@ -8,6 +8,12 @@ Plug-and-play Node.js SDK for multi-provider email OAuth (Gmail, Zoho, Outlook),
 npm install unibox-sdk
 ```
 
+## v0.1.1 update
+
+`unibox-sdk` now supports both:
+- ESM: `import { createUnibox } from "unibox-sdk"`
+- CommonJS: `const { createUnibox } = require("unibox-sdk")`
+
 Requirements:
 - Node.js >= 18
 - Express (this package declares `express` as a peer dependency)

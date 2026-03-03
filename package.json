@@ -47,5 +47,20 @@
     "type": "git",
     "url": ""
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "inbox",
+    "unified-inbox",
+    "oauth",
+    "sdk",
+    "gmail",
+    "outlook",
+    "zoho",
+    "microsoft-graph",
+    "express",
+    "typescript",
+    "llm",
+    "ai"
+  ]
 }
